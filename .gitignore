@@ -3,3 +3,7 @@
 
 # Ignorar arquivos de log
 *.log
+
+# Ignorar testes locais
+.pytest_cache
+__pycache__
