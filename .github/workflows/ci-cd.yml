@@ -1,0 +1,42 @@
+name: CI/CD PythonAnywhere
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependências
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Rodar testes
+        run: pytest
+
+      - name: Deploy para PythonAnywhere
+        if: success()
+        run: |
+          curl -X POST https://www.pythonanywhere.com/api/v0/user/${{ secrets.PA_USERNAME }}/files/path/home/${{ secrets.PA_USERNAME }}/bot.py \
+          --data-binary "@bot.py" \
+          --header "Authorization: Token ${{ secrets.PA_API_TOKEN }}"
+
+      - name: Executar script remotamente
+        if: success()
+        run: |
+          curl -X POST https://www.pythonanywhere.com/api/v0/user/${{ secrets.PA_USERNAME }}/consoles/python3.11/ \
+          --header "Authorization: Token ${{ secrets.PA_API_TOKEN }}" \
+          --header "Content-Type: application/json" \
+          --data '{"executable": "python3.11", "command": "python3.11 bot.py"}'
