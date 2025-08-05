@@ -1,9 +1,12 @@
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+def lendo_env():
+    load_dotenv()
 
-usuario = os.getenv("USUARIO_BOT")
-senha = os.getenv("SENHA_BOT")
+    usuario = os.getenv("USUARIO_BOT")
+    senha = os.getenv("SENHA_BOT")
 
-print(usuario, senha)
+    print(usuario, senha)
+    
+    return usuario, senha

@@ -1,7 +1,6 @@
 import logging
 import sys
-from dotenv import load_dotenv
-import os
+from Python.env import lendo_env
 
 def test_log():
     taskName = sys.argv[0].replace('.py','')
@@ -28,10 +27,5 @@ def test_log():
         logging.error(f"Erro durante a execução: {e}")
 
 def test_env():
-
-    load_dotenv()
-
-    usuario = os.getenv("USUARIO_BOT")
-    senha = os.getenv("SENHA_BOT")
-
-    print(usuario, senha)
+    assert lendo_env()
+    
