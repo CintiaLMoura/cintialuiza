@@ -2,7 +2,7 @@ name: CI/CD PythonAnywhere
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -28,15 +28,8 @@ jobs:
 
       - name: Deploy para PythonAnywhere
         if: success()
-        run: |
-          curl -X POST https://www.pythonanywhere.com/api/v0/user/${{ secrets.PA_USERNAME }}/files/path/home/${{ secrets.PA_USERNAME }}/bot.py \
-          --data-binary "@bot.py" \
-          --header "Authorization: Token ${{ secrets.PA_API_TOKEN }}"
+        run: curl -X POST https://www.pythonanywhere.com/api/v0/user/${{ secrets.PA_USERNAME }}/files/path/home/${{ secrets.PA_USERNAME }}/bot.py --data-binary "@bot.py" --header "Authorization: Token ${{ secrets.PA_API_TOKEN }}"
 
       - name: Executar script remotamente
         if: success()
-        run: |
-          curl -X POST https://www.pythonanywhere.com/api/v0/user/${{ secrets.PA_USERNAME }}/consoles/python3.11/ \
-          --header "Authorization: Token ${{ secrets.PA_API_TOKEN }}" \
-          --header "Content-Type: application/json" \
-          --data '{"executable": "python3.11", "command": "python3.11 bot.py"}'
+        run: curl -X POST https://www.pythonanywhere.com/api/v0/user/${{ secrets.PA_USERNAME }}/consoles/python3.11/ --header "Authorization: Token ${{ secrets.PA_API_TOKEN }}" --header "Content-Type: application/json" --data '{"executable": "python3.11", "command": "python3.11 bot.py"}'
